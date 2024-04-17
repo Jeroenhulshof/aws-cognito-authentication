@@ -1,1 +1,7 @@
 .idea
+.env
+bootstrap
+function.zip
+main
+.bin
+.DS_Store
