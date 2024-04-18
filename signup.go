@@ -75,10 +75,22 @@ func signup(event CognitoEvent) error {
 		},
 	}
 
+	// Check if user exists
+	users := &cognito.ListUsersInput{
+		UserPoolId: aws.String("eu-central-1_4sO6MleUZ"),
+		Filter:     aws.String("email = \"" + event.Email + "\""),
+	}
+
+	response, _ := awsCognitoClient.Client.ListUsers(context.TODO(), users)
+
+	if len(response.Users) > 0 {
+		return fmt.Errorf("user already exists")
+	}
+
 	_, err = awsCognitoClient.Client.SignUp(context.TODO(), input)
 
 	if err != nil {
-		return fmt.Errorf("unable to sign up user: %w", err)
+		return fmt.Errorf("unable to sign up user")
 	}
 
 	return nil
